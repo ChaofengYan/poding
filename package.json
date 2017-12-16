@@ -1,0 +1,21 @@
+{
+  "name": "poding",
+  "version": "0.0.1",
+  "description": "可视化页面搭建——React schema庖丁引擎",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "dn test && dn build -e prod"
+  },
+  "author": {
+    "name": "Xingtan",
+    "email": "yanchaofeng1989@gmail.com",
+    "url": "https://github.com/ChaofengYan"
+  },
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "antd": "^3.0.1",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2"
+  }
+}

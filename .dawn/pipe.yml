@@ -1,0 +1,27 @@
+init:
+  - name: pkginfo
+
+dev:
+  - name: clean
+  - name: faked
+    port: 8001
+  - name: webpack
+    watch: true
+  - name: server
+    port: 3001
+  - name: browser-sync
+
+build:
+  - name: clean
+  - name: webpack
+
+test:
+  - name: lint
+  - name: unit
+
+publish:
+  - name: shell
+    script:
+      - dn test
+      - dn build
+      - npm pu
