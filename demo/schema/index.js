@@ -1,7 +1,7 @@
 export default {
   type:'page',
   key:'000',
-  component:'page',
+  component:'container',
   children:[{
     key:'H1test',
     type:'row',  //page,row,placehold,content
@@ -10,13 +10,13 @@ export default {
     engine:'engine01',
     childrenDeleteable:false,
     children:[{
-      key:'cot1'
+      key:'cot1',
       type:'placehold',
-      component:'placehold'
+      component:'container'
     },{
-      key:'cot1'
+      key:'cot1',
       type:'placehold',
-      component:'placehold'
+      component:'container'
     }]
   }
   // ,{

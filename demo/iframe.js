@@ -8,7 +8,7 @@ import {addSchema} from '../src/paoding/operation';
 import {registerRefs,actions} from '../src/engineControl/';
 
 import page from './components/page/';
-import placehold from './components/layout/placehold/';
+import container from './components/container/';
 import layout01 from './components/layout/layout01/';
 import H1 from './components/content/h1/';
 
@@ -110,7 +110,7 @@ const WrapComponent = ({children,...schema})=>{
 
 contactForm.setConfig({
   componentMap:{
-    page,H1,Modal,layout01,placehold,
+    page,H1,Modal,layout01,container,
     DIV:(props)=><div {...props}></div>
   },
   wrapComponent:WrapComponent,
