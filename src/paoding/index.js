@@ -1,16 +1,34 @@
 import { DOM, createElement,Component } from 'react';
+
 import HOC from './hoc';
+import {reduceSchema} from './reducer';
+import {collectKeys} from './operation';
 
 //const _componentMap = new WeakMap();
 let _componentMap = null;
-let _componentRefs = {};  //组件渲染后的ref
 let _engineMap={};  //动态引擎
+let _componentReferred = {}; //被引用的组件们
 
 export default class ReactJsonSchema {
+  isPreAnalysised = false;  //分析过被引用组件
+
+  //预分析：被引用项，并为每个schema生成随机key
+  preAnalyse(schema){
+    let _keys={};
+    if(this.isPreAnalysised) return;
+    reduceSchema(schema,(_schema)=>{
+      const {key,referred} = _schema;
+      collectKeys(_schema);
+      if(!referred) return;  
+      _componentReferred[key] = {..._schema,referred:false};
+    });
+    this.isPreAnalysised = true;
+  }
 
   parseSchema(schema) {
     let element = null;
     let elements = null;
+    this.preAnalyse(schema);
     if (Array.isArray(schema)) {
       elements = this.parseSubSchemas(schema);
     } else if (schema) {
@@ -31,10 +49,17 @@ export default class ReactJsonSchema {
   }
 
   createComponent(schema) {
-    const { component, children, data={},engine,...rest } = schema;
+    const { component, children, data={},refer,referred,engine,...rest } = schema;
+    if(referred) return ()=>null; //被引用组件不单独渲染
     let Component = this.resolveComponent(schema);
-    //children 支持String 
-    const Children = typeof children === 'string' ? children : this.resolveComponentChildren(schema);
+    //解析children 
+    let Children;
+    let refers = typeof refer=='string'?[refer]:refer;
+    if(Array.isArray(refers)){  //refer优先级高
+      Children = this.parseSchema(refers.map((_refer)=> _componentReferred[_refer]));
+    }else{
+      Children = typeof children === 'string' ? children : this.resolveComponentChildren(schema);
+    }
     //执行HOC
     Component = HOC({
       WrapComponent:this.wrapComponent,
@@ -48,7 +73,8 @@ export default class ReactJsonSchema {
   }
 
   resolveComponent(schema) {
-    let Component = null;
+    const {component} = schema;
+    let Component = ()=><div>{component}</div>;  //默认打印component
     if (schema.hasOwnProperty('component')) {
       if (schema.component === Object(schema.component)) {
         //已是React元素

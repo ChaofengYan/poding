@@ -1,29 +1,38 @@
 import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
+
 import React,{ DOM, createElement,Component } from 'react';
+import {Modal} from 'antd';
 
-import Poding from './paoding/';
-import {registerRefs,actions} from './engineControl/';
+import Poding from '../src/paoding/';
+import {registerRefs,actions} from '../src/engineControl/';
 
-import schema from './demo/';
+import schema from './schema/';
 import H1 from './components/h1/';
 
 const contactForm = new Poding();
 const {setGlobal,getGlobal,setState,ajax,tip} = actions;
 
+window.React = React;
+window.ReactDOM = ReactDOM;
+
 import 'antd/dist/antd.css'; 
+import './css/index.less';
 
 const WrapComponent = ({children,...schema})=>{
   return (
     <div className='01'>
       <h1>{schema.title}</h1>
-      {children}
+      <div dangerouslySetInnerHTML={{
+        __html:ReactDOMServer.renderToString(children)
+      }}></div>
     </div>
   )
 };
 
 contactForm.setConfig({
   componentMap:{
-    H1,
+    H1,Modal,
     DIV:(props)=><div {...props}></div>
   },
   wrapComponent:WrapComponent,
@@ -35,6 +44,7 @@ contactForm.setConfig({
       if(code==200){
         tip();
         setState('h1test','id','123');
+        setState('modal01','visible',true);
       }
     }
   },

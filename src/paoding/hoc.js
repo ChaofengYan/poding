@@ -13,7 +13,7 @@ export default ({WrappedComponent,schema,WrapComponent,registerRefs})=>{
   if(WrapComponent&&!registerRefs){
     return (props)=>(
       <WrapComponent {...schema}>
-        <WrappedComponent />
+        <WrappedComponent {...props}/>
       </WrapComponent>
     );
   }

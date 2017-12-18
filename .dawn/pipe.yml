@@ -7,6 +7,8 @@ dev:
     port: 8001
   - name: webpack
     watch: true
+    template: ./demo/*.html
+    entry: ./demo/*.js
   - name: server
     port: 3001
   - name: browser-sync
